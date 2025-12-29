@@ -1,0 +1,14 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run Pint to format code
+./vendor/bin/pint
+
+# Add formatted files back to staging
+git add -u
+
+# Run Larastan
+./vendor/bin/phpstan analyse --memory-limit=2G --error-format=table
+
+# Run tests
+./vendor/bin/pest
