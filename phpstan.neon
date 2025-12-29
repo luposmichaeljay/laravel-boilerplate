@@ -2,13 +2,26 @@ includes:
     - ./vendor/larastan/larastan/extension.neon
 
 parameters:
-    level: 5
+    level: 6
     paths:
         - app
         - routes
+        - database/factories
+        - database/seeders
 
     excludePaths:
         - %currentWorkingDirectory%/bootstrap/*
         - %currentWorkingDirectory%/storage/*
+        - %currentWorkingDirectory%/vendor/*
 
     reportUnmatchedIgnoredErrors: false
+
+    ignoreErrors:
+        # Allow dynamic where methods (e.g., whereEmail)
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::where[a-zA-Z]+\(\)#'
+        # Laravel relationship covariance warnings - these are expected Laravel behavior
+        - '#should return .+ but returns .+this\(#'
+        # Laravel relationship missing second generic type parameter
+        - '#Generic type .+ in PHPDoc tag @return does not specify all template types#'
+        # BelongsToMany generic type mismatch for pivot
+        - '#Generic type .+ in PHPDoc tag @return is not subtype of template type TPivotModel#'
